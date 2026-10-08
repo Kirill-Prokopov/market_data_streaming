@@ -1,0 +1,9 @@
+[Unit]
+Description=Archive, upload and clean up closed orderbook day folders (Yandex Disk)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/Code/market_data_streaming
+ExecStart=/root/Code/.venv_market_data_streaming/bin/python -m market_data_streaming.upload --out-dir /root/Code/market_data/orderbook --secrets-path /root/Code/.secrets_market_data_streaming --feed orderbook

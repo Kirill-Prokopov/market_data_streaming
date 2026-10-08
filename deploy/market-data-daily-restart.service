@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart the market data recorders (after the 00:00 UTC file close, so Finam's 24 h stream cut lands in the quiet hours)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl try-restart market-data-orderbook.service market-data-trades.service

@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily recorder restart at 00:01 UTC (03:01 Moscow time, exchanges closed)
+
+[Timer]
+OnCalendar=*-*-* 00:01:00 UTC
+Persistent=false
+
+[Install]
+WantedBy=timers.target

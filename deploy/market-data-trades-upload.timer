@@ -1,0 +1,9 @@
+[Unit]
+Description=Nightly trades upload at 00:45 UTC (offset from the 00:30 order-book upload; one vCPU)
+
+[Timer]
+OnCalendar=*-*-* 00:45:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target

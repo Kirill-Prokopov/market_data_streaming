@@ -1,0 +1,15 @@
+[Unit]
+Description=Market data recorder: trades (raw protobuf, stocks + OFZ bonds + futures)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/Code/market_data_streaming
+ExecStart=/root/Code/.venv_market_data_streaming/bin/python -m market_data_streaming.trades @/root/Code/market_data_streaming/deploy/symbols/stocks.txt @/root/Code/market_data_streaming/deploy/symbols/bonds.txt @/root/Code/market_data_streaming/deploy/symbols/futures.txt --out-dir '/root/Code/market_data/trades' --secrets-file '/root/Code/.secrets_market_data_streaming'
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
