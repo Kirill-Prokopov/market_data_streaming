@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "market_data_streaming"
+version = "0.0.0"
+description = "Stream market data from the Finam Trade API"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "finam-sdk==2.22.0"
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools]
+packages = ["market_data_streaming"]

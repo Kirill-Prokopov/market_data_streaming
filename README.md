@@ -1,1 +1,1 @@
-blank
+Package to stream data from Finam Trade Api
