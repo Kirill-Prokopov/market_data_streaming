@@ -1,12 +1,12 @@
 [Unit]
-Description=Market data recorder: orderbook (raw protobuf, stocks + OFZ bonds + futures)
+Description=Market data recorder: orderbook (raw protobuf, stocks + bonds + futures + perpetuals)
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
 WorkingDirectory=/root/Code/market_data_streaming
-ExecStart=/root/Code/.venv_market_data_streaming/bin/python -m market_data_streaming.orderbook @/root/Code/market_data_streaming/deploy/symbols/stocks.txt @/root/Code/market_data_streaming/deploy/symbols/bonds.txt @/root/Code/market_data_streaming/deploy/symbols/futures.txt --out-dir '/root/Code/market_data/orderbook' --secrets-file '/root/Code/.secrets_market_data_streaming'
+ExecStart=/root/Code/.venv_market_data_streaming/bin/python -m market_data_streaming.orderbook @/root/Code/market_data_streaming/deploy/symbols/stocks.txt @/root/Code/market_data_streaming/deploy/symbols/ofz.txt @/root/Code/market_data_streaming/deploy/symbols/corp_bonds.txt @/root/Code/market_data_streaming/deploy/symbols/futures.txt @/root/Code/market_data_streaming/deploy/symbols/perpetuals.txt --out-dir '/root/Code/market_data/orderbook' --secrets-file '/root/Code/.secrets_market_data_streaming'
 Restart=always
 RestartSec=5
 TimeoutStopSec=30

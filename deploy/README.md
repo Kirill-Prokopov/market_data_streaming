@@ -8,7 +8,8 @@ then deletes the local folder.
 Layout on the server: repos in `/root/Code/{market_data_streaming,y_disk}`, venv `/root/Code/.venv_market_data_streaming`,
 data `/root/Code/market_data/{orderbook,trades}`, secrets `/root/Code/.secrets_market_data_streaming`
 (`FINAM_STREAMING_READ_API_KEY`, `Y_DISK_MARKET_DATA_STREAMING_API_KEY`).
-Symbols: `symbols/{stocks,bonds,futures}.txt` (one per line, passed to the recorders as `@file`).
+Symbols (289): `symbols/{stocks,ofz,corp_bonds,futures,perpetuals}.txt` (one per line, passed to the recorders as `@file`).
+Stream opens are rate-limited by Finam (~200/min, shared): the recorder paces them (one per 0.6 s), so a start takes ~3 min.
 Futures expire: refresh `futures.txt` (3 nearest contracts per underlying) before the nearest one expires.
 
 Update: `git pull --ff-only` in the repo, then `systemctl restart market-data-orderbook market-data-trades`.

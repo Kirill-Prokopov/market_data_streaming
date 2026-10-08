@@ -24,6 +24,7 @@ Subscribe = Callable[[AsyncFinamClient, str], AsyncIterator[Any]]
 _DAY_S: int = 86_400
 _DAY_NS: int = _DAY_S * 10**9
 _RETRY_S: float = 5  # also keeps two sessions of one symbol from sharing a HHMMSS file name
+_SUBSCRIBE_GAP_S: float = 0.6  # Finam rate-limits stream opens (~200/min, shared by all streams of the account)
 _LOG_HEADER: str = "file,first_ns,last_ns,closed_ns,msgs,reason\n"
 
 
@@ -69,9 +70,22 @@ class _Writer:
                 g.write(f"{header}{path.name},{self._first},{self._last},{time.time_ns()},{self._msgs},{reason}\n")
 
 
-async def _record(client: AsyncFinamClient, symbol: str, writer: _Writer, subscribe: Subscribe) -> None:
+class _Pacer:
+    """Lets one subscribe through every `gap_s`, so a start-up or a mass reconnect stays under the rate limit."""
+
+    def __init__(self, gap_s: float) -> None:
+        self._gap_s: float = gap_s
+        self._lock: asyncio.Lock = asyncio.Lock()
+
+    async def wait(self) -> None:
+        async with self._lock:
+            await asyncio.sleep(self._gap_s)
+
+
+async def _record(client: AsyncFinamClient, symbol: str, writer: _Writer, subscribe: Subscribe, pacer: _Pacer) -> None:
     try:
         while True:
+            await pacer.wait()
             try:
                 async for resp in subscribe(client, symbol):
                     t: int = time.time_ns()
@@ -105,12 +119,13 @@ async def arecord(
 ) -> None:
     out = Path(out_dir)
     writers: dict[str, _Writer] = {s: _Writer(out, s) for s in symbols}
+    pacer = _Pacer(_SUBSCRIBE_GAP_S)
     midnight = asyncio.create_task(_close_at_midnight(list(writers.values())))
     try:
         async with get_async_client(secrets_file=secrets_file, var_name=secret_var) as client:
             async with asyncio.TaskGroup() as tg:
                 for s, w in writers.items():
-                    tg.create_task(_record(client, s, w, subscribe))
+                    tg.create_task(_record(client, s, w, subscribe, pacer))
     finally:
         midnight.cancel()
 
