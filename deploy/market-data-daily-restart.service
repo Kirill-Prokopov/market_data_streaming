@@ -3,4 +3,4 @@ Description=Restart the market data recorders (after the 00:00 UTC file close, s
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/systemctl try-restart market-data-orderbook.service market-data-trades.service
+ExecStart=/usr/bin/systemctl try-restart market-data-orderbook.service market-data-trades.service market-data-quotes.service

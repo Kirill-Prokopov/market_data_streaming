@@ -1,0 +1,15 @@
+[Unit]
+Description=Market data recorder: quotes (raw protobuf, MOEX indices)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/Code/market_data_streaming
+ExecStart=/root/Code/.venv_market_data_streaming/bin/python -m market_data_streaming.quotes @/root/Code/market_data_streaming/deploy/symbols/indices.txt --out-dir '/root/Code/market_data/quotes' --secrets-file '/root/Code/.secrets_market_data_streaming'
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
