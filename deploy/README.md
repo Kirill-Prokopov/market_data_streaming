@@ -8,7 +8,7 @@ then deletes the local folder.
 Layout on the server: repos in `/root/Code/{market_data_streaming,y_disk}`, venv `/root/Code/.venv_market_data_streaming`,
 data `/root/Code/market_data/{orderbook,trades,quotes}`, secrets `/root/Code/.secrets_market_data_streaming`
 (`FINAM_STREAMING_READ_API_KEY`, `Y_DISK_MARKET_DATA_STREAMING_API_KEY`).
-Symbols for the order-book and trades recorders (296): `symbols/{stocks,ofz,corp_bonds,futures,perpetuals}.txt`
+Symbols for the order-book and trades recorders (295): `symbols/{stocks,ofz,corp_bonds,futures,perpetuals}.txt`
 (one per line, passed to the recorders as `@file`). The quotes recorder (`market_data_streaming.quotes`, one
 `SubscribeQuote` stream per symbol) records the 17 MOEX indices in `symbols/indices.txt`; indices have no order book.
 Stream opens are rate-limited by Finam (~200/min, shared): the recorder paces them (one per 0.6 s), so a start takes ~3 min.
